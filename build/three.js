@@ -1,8 +1,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = global || self, factory(global.THREE = {}));
-}(this, function (exports) { 'use strict';
+	(factory((global.THREE = {})));
+}(this, (function (exports) { 'use strict';
 
 	// Polyfills
 
@@ -22073,6 +22073,7 @@
 		var frameOfReferenceType = 'stage';
 
 		var pose = null;
+		var poseTarget = null;
 
 		var controllers = [];
 		var inputSources = [];
@@ -22221,12 +22222,19 @@
 
 		}
 
+		this.setPoseTarget = function ( object ) {
+
+			if ( object !== undefined ) poseTarget = object;
+
+		};
+
 		this.getCamera = function ( camera ) {
 
 			if ( isPresenting() ) {
 
 				var parent = camera.parent;
 				var cameras = cameraVR.cameras;
+				var object = poseTarget || camera;
 
 				updateCamera( cameraVR, parent );
 
@@ -22237,10 +22245,9 @@
 				}
 
 				// update camera and its children
+				object.matrixWorld.copy( cameraVR.matrixWorld );
 
-				camera.matrixWorld.copy( cameraVR.matrixWorld );
-
-				var children = camera.children;
+				var children = object.children;
 
 				for ( var i = 0, l = children.length; i < l; i ++ ) {
 
@@ -22255,6 +22262,12 @@
 			}
 
 			return camera;
+
+		};
+
+		this.getCameraPose = function ( ) {
+
+			return pose;
 
 		};
 
@@ -22333,7 +22346,7 @@
 
 			}
 
-			if ( onAnimationFrameCallback ) onAnimationFrameCallback( time );
+			if ( onAnimationFrameCallback ) onAnimationFrameCallback( time, frame );
 
 		}
 
@@ -47811,7 +47824,6 @@
 	exports.CircleGeometry = CircleGeometry;
 	exports.CircleBufferGeometry = CircleBufferGeometry;
 	exports.BoxGeometry = BoxGeometry;
-	exports.CubeGeometry = BoxGeometry;
 	exports.BoxBufferGeometry = BoxBufferGeometry;
 	exports.ShadowMaterial = ShadowMaterial;
 	exports.SpriteMaterial = SpriteMaterial;
@@ -47994,6 +48006,7 @@
 	exports.RGBADepthPacking = RGBADepthPacking;
 	exports.TangentSpaceNormalMap = TangentSpaceNormalMap;
 	exports.ObjectSpaceNormalMap = ObjectSpaceNormalMap;
+	exports.CubeGeometry = BoxGeometry;
 	exports.Face4 = Face4;
 	exports.LineStrip = LineStrip;
 	exports.LinePieces = LinePieces;
@@ -48034,4 +48047,4 @@
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
