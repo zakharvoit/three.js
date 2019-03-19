@@ -22,6 +22,7 @@ function WebGLAnimation() {
 
 		start: function () {
 
+			if ( context === null ) return;
 			if ( isAnimating === true ) return;
 			if ( animationLoop === null ) return;
 
