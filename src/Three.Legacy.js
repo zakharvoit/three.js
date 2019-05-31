@@ -1456,21 +1456,9 @@ WebGLRenderer.prototype.setFaceCulling = function () {
 
 };
 
-WebGLRenderer.prototype.allocTextureUnit = function () {
-
-	console.warn( 'THREE.WebGLRenderer: .allocTextureUnit() has been removed.' );
-
-};
-
 WebGLRenderer.prototype.setTexture = function () {
 
 	console.warn( 'THREE.WebGLRenderer: .setTexture() has been removed.' );
-
-};
-
-WebGLRenderer.prototype.setTexture2D = function () {
-
-	console.warn( 'THREE.WebGLRenderer: .setTexture2D() has been removed.' );
 
 };
 
