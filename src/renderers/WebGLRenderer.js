@@ -43,6 +43,7 @@ import { WebGLState } from './webgl/WebGLState.js';
 import { WebGLTextures } from './webgl/WebGLTextures.js';
 import { WebGLUniforms } from './webgl/WebGLUniforms.js';
 import { WebGLUtils } from './webgl/WebGLUtils.js';
+import { WebVRManager } from './webvr/WebVRManager.js';
 import { WebXRManager } from './webxr/WebXRManager.js';
 import { WebGLMaterials } from './webgl/WebGLMaterials.js';
 import { WebGLUniformsGroups } from './webgl/WebGLUniformsGroups.js';
@@ -347,7 +348,7 @@ class WebGLRenderer {
 
 		// xr
 
-		const xr = new WebXRManager( _this, _gl );
+		const xr = ( typeof navigator !== 'undefined' && 'xr' in navigator ) ? new WebXRManager( _this, _gl ) : new WebVRManager( _this );
 
 		this.xr = xr;
 
@@ -1066,6 +1067,11 @@ class WebGLRenderer {
 
 			if ( scene.isScene === true ) scene.onAfterRender( _this, scene, camera );
 
+			if ( xr.enabled && xr.submitFrame ) {
+
+				xr.submitFrame();
+
+			}
 			// _gl.finish();
 
 			bindingStates.resetDefaultState();
