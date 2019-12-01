@@ -527,6 +527,8 @@ function WebXRManager( renderer, gl ) {
 
 	this.dispose = function () {};
 
+	this.submitFrame = function () {};
+
 }
 
 Object.assign( WebXRManager.prototype, EventDispatcher.prototype );
