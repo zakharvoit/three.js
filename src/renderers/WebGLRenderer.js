@@ -45,6 +45,8 @@ import { WebGLState } from './webgl/WebGLState.js';
 import { WebGLTextures } from './webgl/WebGLTextures.js';
 import { WebGLUniforms } from './webgl/WebGLUniforms.js';
 import { WebGLUtils } from './webgl/WebGLUtils.js';
+import { WebGLMultiview } from './webgl/WebGLMultiview.js';
+import { WebVRManager } from './webvr/WebVRManager.js';
 import { WebXRManager } from './webxr/WebXRManager.js';
 
 function WebGLRenderer( parameters ) {
@@ -304,8 +306,7 @@ function WebGLRenderer( parameters ) {
 	initGLContext();
 
 	// xr
-
-	var xr = new WebXRManager( _this, _gl );
+	var xr = ( typeof navigator !== 'undefined' && 'xr' in navigator ) ? new WebXRManager( _this, _gl ) : new WebVRManager( _this );
 
 	this.xr = xr;
 
@@ -1260,6 +1261,17 @@ function WebGLRenderer( parameters ) {
 
 		state.setPolygonOffset( false );
 
+		if ( xr.enabled ) {
+
+			if ( multiview.isAvailable() ) {
+
+				multiview.detachCamera( camera );
+
+			}
+
+			xr.submitFrame();
+
+		}
 		// _gl.finish();
 
 		currentRenderList = null;
