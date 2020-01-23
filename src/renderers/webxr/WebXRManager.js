@@ -22,6 +22,7 @@ function WebXRManager( renderer, gl ) {
 	var referenceSpaceType = 'local-floor';
 
 	var pose = null;
+	var poseTarget = null;
 
 	var controllers = [];
 	var inputSourcesMap = new Map();
@@ -380,6 +381,12 @@ function WebXRManager( renderer, gl ) {
 
 	}
 
+	this.setPoseTarget = function ( object ) {
+
+		if ( object !== undefined ) poseTarget = object;
+
+	};
+
 	this.getCamera = function ( camera ) {
 
 		cameraVR.near = cameraR.near = cameraL.near = camera.near;
@@ -401,6 +408,7 @@ function WebXRManager( renderer, gl ) {
 
 		var parent = camera.parent;
 		var cameras = cameraVR.cameras;
+		var object = poseTarget || camera;
 
 		updateCamera( cameraVR, parent );
 
@@ -412,9 +420,9 @@ function WebXRManager( renderer, gl ) {
 
 		// update camera and its children
 
-		camera.matrixWorld.copy( cameraVR.matrixWorld );
+		object.matrixWorld.copy( cameraVR.matrixWorld );
 
-		var children = camera.children;
+		var children = object.children;
 
 		for ( var i = 0, l = children.length; i < l; i ++ ) {
 
