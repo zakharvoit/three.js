@@ -53,6 +53,12 @@ class WebXRManager extends EventDispatcher {
 
 		this.isPresenting = false;
 
+		this.getCameraPose = function ( ) {
+
+			return pose;
+
+		};
+
 		this.getController = function ( index ) {
 
 			let controller = controllers[ index ];
