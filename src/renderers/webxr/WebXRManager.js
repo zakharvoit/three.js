@@ -18,6 +18,7 @@ class WebXRManager extends EventDispatcher {
 		let session = null;
 
 		let framebufferScaleFactor = 1.0;
+		var poseTarget = null;
 
 		let referenceSpace = null;
 		let referenceSpaceType = 'local-floor';
@@ -345,6 +346,13 @@ class WebXRManager extends EventDispatcher {
 
 		}
 
+		this.setPoseTarget = function ( object ) {
+
+			if ( object !== undefined ) poseTarget = object;
+
+		};
+
+
 		this.getCamera = function ( camera ) {
 
 			cameraVR.near = cameraR.near = cameraL.near = camera.near;
@@ -366,6 +374,7 @@ class WebXRManager extends EventDispatcher {
 
 			const parent = camera.parent;
 			const cameras = cameraVR.cameras;
+			var object = poseTarget || camera;
 
 			updateCamera( cameraVR, parent );
 
@@ -377,11 +386,11 @@ class WebXRManager extends EventDispatcher {
 
 			// update camera and its children
 
-			camera.matrixWorld.copy( cameraVR.matrixWorld );
-			camera.matrix.copy( cameraVR.matrix );
-			camera.matrix.decompose( camera.position, camera.quaternion, camera.scale );
+			object.matrixWorld.copy( cameraVR.matrixWorld );
+			object.matrix.copy( cameraVR.matrix );
+			object.matrix.decompose( object.position, object.quaternion, object.scale );
 
-			const children = camera.children;
+			const children = object.children;
 
 			for ( let i = 0, l = children.length; i < l; i ++ ) {
 
