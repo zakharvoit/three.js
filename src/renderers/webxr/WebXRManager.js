@@ -48,7 +48,13 @@ function WebXRManager( renderer, gl ) {
 
 	this.isPresenting = false;
 
-	this.getController = function ( index ) {
+	this.getCameraPose = function ( ) {
+
+		return pose;
+
+	};
+
+	this.getController = function ( id ) {
 
 		let controller = controllers[ index ];
 
