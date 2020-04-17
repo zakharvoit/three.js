@@ -45,7 +45,6 @@ import { WebGLState } from './webgl/WebGLState.js';
 import { WebGLTextures } from './webgl/WebGLTextures.js';
 import { WebGLUniforms } from './webgl/WebGLUniforms.js';
 import { WebGLUtils } from './webgl/WebGLUtils.js';
-import { WebGLMultiview } from './webgl/WebGLMultiview.js';
 import { WebVRManager } from './webvr/WebVRManager.js';
 import { WebXRManager } from './webxr/WebXRManager.js';
 
