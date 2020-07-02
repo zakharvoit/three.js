@@ -23586,6 +23586,9 @@
 		var _currentDepthNear = null;
 		var _currentDepthFar = null;
 
+		var baseLayer;
+		var layers = [];
+
 		//
 
 		this.enabled = false;
@@ -23596,6 +23599,14 @@
 
 			return pose;
 
+		};
+
+		this.addLayer = function ( layer ) {
+			var layersCopy;
+			layers.push(layer);
+			layersCopy = layers.map((l) => l);
+			layersCopy.unshift(baseLayer);
+			session.updateRenderState( { layers: layersCopy } );
 		};
 
 		this.getController = function ( id ) {
@@ -23738,9 +23749,9 @@
 				};
 
 				// eslint-disable-next-line no-undef
-				var baseLayer = new XRWebGLLayer( session, gl, layerInit );
+				baseLayer = new XRWebGLLayer( session, gl, layerInit );
 
-				session.updateRenderState( { baseLayer: baseLayer } );
+				session.updateRenderState( { layers: [baseLayer] } );
 
 				session.requestReferenceSpace( referenceSpaceType ).then( onRequestReferenceSpace );
 
@@ -23953,7 +23964,7 @@
 			if ( pose !== null ) {
 
 				var views = pose.views;
-				var baseLayer = session.renderState.baseLayer;
+				var baseLayer = session.renderState.layers[0];
 
 				renderer.setFramebuffer( baseLayer.framebuffer );
 
