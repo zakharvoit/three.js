@@ -23,6 +23,9 @@ function WebXRManager( renderer, gl ) {
 	const controllers = [];
 	const inputSourcesMap = new Map();
 
+	var layers = [];
+	var baseLayer;
+
 	//
 
 	const cameraL = new PerspectiveCamera();
@@ -184,6 +187,28 @@ function WebXRManager( renderer, gl ) {
 
 	};
 
+	this.addLayer = function(layer) {
+
+    layers.push(layer);
+    if (layers.length === 1) {
+    	session.updateRenderState( { baseLayer: baseLayer } );
+    } else {
+    	session.updateRenderState( { layers: layers } );
+    }
+
+  };
+
+  this.removeLayer = function(layer) {
+
+    layers.splice(layers.indexOf(layer), 1);
+    if (layers.length === 1) {
+    	session.updateRenderState( { baseLayer: baseLayer } );
+    } else {
+    	session.updateRenderState( { layers: layers } );
+    }
+
+  };
+
 	this.setSession = function ( value ) {
 
 		session = value;
@@ -215,9 +240,8 @@ function WebXRManager( renderer, gl ) {
 			};
 
 			// eslint-disable-next-line no-undef
-			const baseLayer = new XRWebGLLayer( session, gl, layerInit );
-
-			session.updateRenderState( { baseLayer: baseLayer } );
+			baseLayer = new XRWebGLLayer( session, gl, layerInit );
+			this.addLayer( baseLayer );
 
 			session.requestReferenceSpace( referenceSpaceType ).then( onRequestReferenceSpace );
 
@@ -428,7 +452,6 @@ function WebXRManager( renderer, gl ) {
 		if ( pose !== null ) {
 
 			const views = pose.views;
-			const baseLayer = session.renderState.baseLayer;
 
 			renderer.setFramebuffer( baseLayer.framebuffer );
 
