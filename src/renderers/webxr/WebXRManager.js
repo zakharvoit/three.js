@@ -24,6 +24,10 @@ class WebXRManager extends EventDispatcher {
 		let referenceSpaceType = 'local-floor';
 
 		let pose = null;
+		var layers = [];
+		var baseLayer;
+
+		//
 
 		const controllers = [];
 		const inputSourcesMap = new Map();
@@ -48,6 +52,8 @@ class WebXRManager extends EventDispatcher {
 		let _currentDepthFar = null;
 
 		//
+
+		this.layersEnabled = false;
 
 		this.enabled = false;
 
@@ -216,7 +222,11 @@ class WebXRManager extends EventDispatcher {
 				// eslint-disable-next-line no-undef
 				const baseLayer = new XRWebGLLayer( session, gl, layerInit );
 
-				session.updateRenderState( { baseLayer: baseLayer } );
+				if (window.XRWebGLBinding && this.layersEnabled) {
+					this.addLayer( baseLayer );
+				} else {
+					session.updateRenderState( { baseLayer: baseLayer } );
+				}
 
 				referenceSpace = await session.requestReferenceSpace( referenceSpaceType );
 
@@ -228,6 +238,23 @@ class WebXRManager extends EventDispatcher {
 				scope.dispatchEvent( { type: 'sessionstart' } );
 
 			}
+
+		};
+
+
+		this.addLayer = function(layer) {
+
+		  if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+		  layers.push(layer);
+		  session.updateRenderState( { layers: layers } );
+
+		};
+
+		this.removeLayer = function(layer) {
+
+		  if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+		  layers.splice(layers.indexOf(layer), 1);
+		  session.updateRenderState( { layers: layers } );
 
 		};
 
