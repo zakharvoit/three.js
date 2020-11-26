@@ -463,7 +463,17 @@ class ObjectLoader extends Loader {
 
 					case 'Geometry':
 
-						console.error( 'THREE.ObjectLoader: Loading "Geometry" is not supported anymore.' );
+						if ( 'THREE' in window && 'LegacyJSONLoader' in THREE ) {
+
+						var geometryLoader = new THREE.LegacyJSONLoader();
+						geometry = geometryLoader.parse( data, this.resourcePath ).geometry;
+
+
+						} else {
+
+						       console.error( 'THREE.ObjectLoader: You have to import LegacyJSONLoader in order load geometry data of type "Geometry".' );
+
+						}
 
 						break;
 
