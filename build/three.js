@@ -17600,6 +17600,7 @@
 		var referenceSpace = null;
 		var referenceSpaceType = 'local-floor';
 		var pose = null;
+		var poseTarget = null;
 		var controllers = [];
 		var inputSourcesMap = new Map(); //
 
@@ -17871,6 +17872,10 @@
 			camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
 		}
 
+		this.setPoseTarget = function (object) {
+			if (object !== undefined) poseTarget = object;
+		};
+
 		this.getCamera = function (camera) {
 			cameraVR.near = cameraR.near = cameraL.near = camera.near;
 			cameraVR.far = cameraR.far = cameraL.far = camera.far;
@@ -17887,6 +17892,7 @@
 
 			var parent = camera.parent;
 			var cameras = cameraVR.cameras;
+			var object = poseTarget || camera;
 			updateCamera(cameraVR, parent);
 
 			for (var i = 0; i < cameras.length; i++) {
@@ -17894,10 +17900,8 @@
 			} // update camera and its children
 
 
-			camera.matrixWorld.copy(cameraVR.matrixWorld);
-			camera.matrix.copy(cameraVR.matrix);
-			camera.matrix.decompose(camera.position, camera.quaternion, camera.scale);
-			var children = camera.children;
+			object.matrixWorld.copy(cameraVR.matrixWorld);
+			var children = object.children;
 
 			for (var _i3 = 0, l = children.length; _i3 < l; _i3++) {
 				children[_i3].updateMatrixWorld(true);
