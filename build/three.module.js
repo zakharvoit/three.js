@@ -22480,6 +22480,7 @@ function WebXRManager( renderer, gl ) {
 	};
 
 	this.addLayer = function(layer) {
+	  console.log('addLayer: ', layer);
 
 	  if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
 	  layers.push(layer);
@@ -22488,7 +22489,7 @@ function WebXRManager( renderer, gl ) {
 	};
 
 	this.removeLayer = function(layer) {
-
+	  console.log('removeLayer: ', layer);
 	  if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
 	  layers.splice(layers.indexOf(layer), 1);
 	  session.updateRenderState( { layers: layers } );
