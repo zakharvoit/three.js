@@ -19595,7 +19595,25 @@
 
 		function materialNeedsLights(material) {
 			return material.isMeshLambertMaterial || material.isMeshToonMaterial || material.isMeshPhongMaterial || material.isMeshStandardMaterial || material.isShadowMaterial || material.isShaderMaterial && material.lights === true;
-		} //
+		} // this.setTexture2D = setTexture2D;
+
+
+		this.setTexture2D = function () {
+			var warned = false; // backwards compatibility: peel texture.texture
+
+			return function setTexture2D(texture, slot) {
+				if (texture && texture.isWebGLRenderTarget) {
+					if (!warned) {
+						console.warn("THREE.WebGLRenderer.setTexture2D: don't use render targets as textures. Use their .texture property instead.");
+						warned = true;
+					}
+
+					texture = texture.texture;
+				}
+
+				textures.setTexture2D(texture, slot);
+			};
+		}(); //
 
 
 		this.setFramebuffer = function (value) {
@@ -36853,9 +36871,6 @@
 		},
 		setTexture: function setTexture() {
 			console.warn('THREE.WebGLRenderer: .setTexture() has been removed.');
-		},
-		setTexture2D: function setTexture2D() {
-			console.warn('THREE.WebGLRenderer: .setTexture2D() has been removed.');
 		},
 		setTextureCube: function setTextureCube() {
 			console.warn('THREE.WebGLRenderer: .setTextureCube() has been removed.');
