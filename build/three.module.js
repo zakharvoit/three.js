@@ -22250,7 +22250,13 @@ function WebXRManager( renderer, gl ) {
 
 	this.isPresenting = false;
 
-	this.getController = function ( index ) {
+	this.getCameraPose = function ( ) {
+
+		return pose;
+
+	};
+
+	this.getController = function ( id ) {
 
 		let controller = controllers[ index ];
 
@@ -23660,6 +23666,13 @@ function WebGLRenderer( parameters ) {
 	}
 
 	initGLContext();
+
+	console.log(
+		'Checking navigator.xr: navigator exists=',
+		typeof navigator !== 'undefined',
+		'xr exists=',
+		'xr' in navigator
+	);
 
 	const xr = ( typeof navigator !== 'undefined' && 'xr' in navigator ) ? new WebXRManager( _this, _gl ) : new WebVRManager( _this );
 
