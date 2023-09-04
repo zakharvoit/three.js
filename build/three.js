@@ -17620,11 +17620,7 @@
 		this.enabled = false;
 		this.isPresenting = false;
 
-		this.getCameraPose = function () {
-			return pose;
-		};
-
-		this.getController = function (id) {
+		this.getController = function (index) {
 			var controller = controllers[index];
 
 			if (controller === undefined) {
